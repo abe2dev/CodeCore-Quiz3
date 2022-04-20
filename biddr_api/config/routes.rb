@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  namespace :api, defaults: {format: :json} do
+    namespace :v1 do
+      resources :auctions, only:[:create, :index, :show] do
+        resources :bids, only:[:create]
+      end
+      resource :session, only:[:create, :destroy]
+      get("/current_user", to:"sessions#get_current_user")
+      resources :users, only:[:create]
+    end
+  end
+
 end
